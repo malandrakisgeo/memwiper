@@ -1,0 +1,76 @@
+MUTEX ON: 
+
+execve("/home/georgem/Developer/linux-freespace-shredder/a.out", ["/home/georgem/Developer/linux-fr"...], 0x7ffcdc5284d0 /* 20 vars */) = 0
+brk(NULL)                               = 0x51c000
+arch_prctl(0x3001 /* ARCH_??? */, 0x7ffd2a2cc1b0) = -1 EINVAL (Invalid argument)
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=117094, ...}) = 0
+mmap(NULL, 117094, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f6bb355d000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libpthread.so.0", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0@\201\0\0\0\0\0\0"..., 832) = 832
+pread64(3, "\4\0\0\0\24\0\0\0\3\0\0\0GNU\0\300n1,\310\303y\372\344\6\337\345\355\273\320\200"..., 68, 824) = 68
+fstat(3, {st_mode=S_IFREG|0755, st_size=304664, ...}) = 0
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f6bb355b000
+mmap(NULL, 135600, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f6bb3539000
+mmap(0x7f6bb3540000, 65536, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x7000) = 0x7f6bb3540000
+mmap(0x7f6bb3550000, 20480, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x17000) = 0x7f6bb3550000
+mmap(0x7f6bb3555000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1b000) = 0x7f6bb3555000
+mmap(0x7f6bb3557000, 12720, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f6bb3557000
+close(3)                                = 0
+openat(AT_FDCWD, "/lib64/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0 \203\2\0\0\0\0\0"..., 832) = 832
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 784, 64) = 784
+pread64(3, "\4\0\0\0\20\0\0\0\5\0\0\0GNU\0\2\0\0\300\4\0\0\0\3\0\0\0\0\0\0\0", 32, 848) = 32
+pread64(3, "\4\0\0\0\24\0\0\0\3\0\0\0GNU\0J\177\263t\t\177\271'\373\223\323^\371\213\250\222"..., 68, 880) = 68
+fstat(3, {st_mode=S_IFREG|0755, st_size=3222048, ...}) = 0
+pread64(3, "\6\0\0\0\4\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0@\0\0\0\0\0\0\0"..., 784, 64) = 784
+mmap(NULL, 1876640, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f6bb336e000
+mprotect(0x7f6bb3394000, 1683456, PROT_NONE) = 0
+mmap(0x7f6bb3394000, 1372160, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x26000) = 0x7f6bb3394000
+mmap(0x7f6bb34e3000, 307200, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x175000) = 0x7f6bb34e3000
+mmap(0x7f6bb352f000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1c0000) = 0x7f6bb352f000
+mmap(0x7f6bb3535000, 12960, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f6bb3535000
+close(3)                                = 0
+mmap(NULL, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f6bb336b000
+arch_prctl(ARCH_SET_FS, 0x7f6bb336b740) = 0
+mprotect(0x7f6bb352f000, 12288, PROT_READ) = 0
+mprotect(0x7f6bb3555000, 4096, PROT_READ) = 0
+mprotect(0x403000, 4096, PROT_READ)     = 0
+mprotect(0x7f6bb35a5000, 4096, PROT_READ) = 0
+munmap(0x7f6bb355d000, 117094)          = 0
+set_tid_address(0x7f6bb336ba10)         = 54573
+set_robust_list(0x7f6bb336ba20, 24)     = 0
+rt_sigaction(SIGRTMIN, {sa_handler=0x7f6bb3540ba0, sa_mask=[], sa_flags=SA_RESTORER|SA_SIGINFO, sa_restorer=0x7f6bb354d1e0}, NULL, 8) = 0
+rt_sigaction(SIGRT_1, {sa_handler=0x7f6bb3540c40, sa_mask=[], sa_flags=SA_RESTORER|SA_RESTART|SA_SIGINFO, sa_restorer=0x7f6bb354d1e0}, NULL, 8) = 0
+rt_sigprocmask(SIG_UNBLOCK, [RTMIN RT_1], NULL, 8) = 0
+prlimit64(0, RLIMIT_STACK, NULL, {rlim_cur=8192*1024, rlim_max=RLIM64_INFINITY}) = 0
+statfs("/", {f_type=BTRFS_SUPER_MAGIC, f_bsize=4096, f_blocks=124606720, f_bfree=99855156, f_bavail=99855480, f_files=0, f_ffree=0, f_fsid={val=[3875603784, 3579801799]}, f_namelen=255, f_frsize=4096, f_flags=ST_VALID|ST_RELATIME}) = 0
+fstat(1, {st_mode=S_IFCHR|0600, st_rdev=makedev(0x88, 0x1), ...}) = 0
+brk(NULL)                               = 0x51c000
+brk(0x53d000)                           = 0x53d000
+brk(NULL)                               = 0x53d000
+write(1, "409006718976\n", 13409006718976
+)          = 13
+mmap(NULL, 8392704, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK, -1, 0) = 0x7f6bb2b6a000
+mprotect(0x7f6bb2b6b000, 8388608, PROT_READ|PROT_WRITE) = 0
+rt_sigprocmask(SIG_BLOCK, ~[], [], 8)   = 0
+clone(child_stack=0x7f6bb3369ef0, flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, parent_tid=[54574], tls=0x7f6bb336a640, child_tidptr=0x7f6bb336a910) = 54574
+rt_sigprocmask(SIG_SETMASK, [], NULL, 8) = 0
+futex(0x7f6bb336a910, FUTEX_WAIT, 54574, NULL^C) = ? ERESTARTSYS (To be restarted if SA_RESTART is set)
+strace: Process 54573 detached 
+
+
+
+
+
+
+
+
+-----------------------
+
+MUTEX OFF: 
+
+
+random_data_file
