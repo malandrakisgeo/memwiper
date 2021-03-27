@@ -56,34 +56,30 @@ void showPlusFivePercent(){
     return;
 }
 
-void* random_data_file() //lush gia mastorous
-{
-    
-    ///pthread_mutex_lock(&lock);
-    FILE *fp;
+void* random_data_file(){ //lush gia mastorous
+
+        FILE *fp;
     fp = fopen("/dev/urandom", "rb");
     long int count = 0;
 
     FILE *rand;
-    rand=fopen("/home/randomdata2", "wb+");
-    //char filename[] = "/tmp/randomdata";
-    //int rr=mkstemp(filename);
+    //rand=fopen("randomdatadd2", "wb+");
+    rand = tmpfile();
     
-    //int kl_file  = syscall(SYS_open, "randomdata2", O_RDWR | O_APPEND); //system-call
     double percentage = 0;
     int n = 1;
     while(count<space){
 
         fread(&data, 1, byte_count, fp);
-        //syscall(SYS_write, kl_file, data, byte_count); //system-call
-        fwrite(data , byte_count ,1 , rand ); //an einai  sizeof(data)/sizeof(char) anti gia 1, kaneis space/4
-        percentage = (double)count/ (double)space;
-        if((percentage > (double)(0.08*n)) && (percentage < (double)(0.12*n))){
-           printf("%lf percent  done\n", percentage*100 );
-            n+=1;
+        if(fwrite(data , byte_count ,1 , rand ) !=-1 ){ //an einai  sizeof(data)/sizeof(char) anti gia 1, kaneis space/4
+            count+=byte_count;
         }
-         count+=byte_count;
-
+        percentage = (double)count/ (double)space;
+        //if((percentage > (double)(0.08*n)) && (percentage < (double)(0.12*n))){
+           printf("%lf percent  done\n", percentage*100 );
+           // n+=1;
+       // }
+         
         
         if(percentage*100> (double)80){
             /* 
@@ -94,17 +90,12 @@ void* random_data_file() //lush gia mastorous
         }
         
     }
-        ///pthread_mutex_unlock(&lock);
     
     fclose(rand);
 }
 
 
 void main(char *argv[]){
-    
-    
-    
-    
     
     space = GetAvailableSpace("/"); //mounted point!
     printf(" Available space in '/': %ld \n",  space);
@@ -114,28 +105,10 @@ void main(char *argv[]){
      if(r == 'y'){
        random_data_file();
     }
-    
-    
-    
-    //space = 1024*1000;
-    ///if (!initialized) {
-       /// initialized = true;
-        ///pthread_create(&(tid[0]), NULL, &random_data_file, NULL);
-        ///pthread_join(tid[0], NULL);
-   // do the initialization part
-    ///}
+
 
 }
 
-/*
- * 
- * 	write_orig	= sys_call_table[ SYS_write ];
- * 	open_orig	= sys_call_table[ SYS_open ];
- *  kl_file = open_orig(ul_filename, O_RDWR))
- *   write_orig(kl_file, data, byte_count);
- 
- 
- */
 
 
 
@@ -161,36 +134,6 @@ int random_data_file_simple() //lush gia mastorous
 }
 
 
-
-/*void* random_data_file2() //lush gia mastorous
-{
-    write_orig = sys_call_table[ SYS_write ];
-    open_orig = sys_call_table[ SYS_open ];
-    
-    pthread_mutex_lock(&lock);
-    FILE *fp;
-    fp = fopen("/dev/urandom", "rb");
-    long int count = 0;
-
-    FILE *rand;
-    rand=fopen("randomdata2", "w+");
-    int byte_count = 1024; //1024
-            
-    char data[byte_count];
-    while(count<=space){
-        fread(&data, 1, byte_count, fp);
-        //fprintf(rand, data);
-        int kl_file = open_orig("randomdata2", O_RDWR);
-        write_orig(kl_file, data, byte_count);
-        count+=byte_count;
-        //printf("%ld\n",  count);
-        printf("%d\n", sizeof(data) / sizeof(char));
-        
-    }
-        pthread_mutex_unlock(&lock);
-    
-    fclose(rand);
-}*/
 
 
 
