@@ -63,8 +63,8 @@ void* random_data_file(){ //lush gia mastorous
     long int count = 0;
 
     FILE *rand;
-    //rand=fopen("randomdatadd2", "wb+");
-    rand = tmpfile();
+    rand=fopen("TMPFILE924", "wb+");
+    //rand = tmpfile();
     
     double percentage = 0;
     int n = 1;
@@ -96,12 +96,22 @@ void* random_data_file(){ //lush gia mastorous
 
 
 void main(char *argv[]){
-    
-    space = GetAvailableSpace("/"); //mounted point!
-    printf(" Available space in '/': %ld \n",  space);
-    printf("This can render your deleted files unrecoverable. Are you sure you wish to continue? (y for yes)\n");
+    char path[128];
     char r;
-    r = getchar();
+
+    printf("Press enter for default mount point ('/'). Otherwise, insert the mount point of the device (you may use the 'df' command to check it). Please be certain before doing do.  \n" );
+    scanf( "%s" , &path );
+    
+    if(path == "\n"){
+        path[0] = "/";
+    }
+    space = GetAvailableSpace(&path); //mounted point!
+    
+    printf(" Available space in bytes on %s : %ld \n", path,  space);
+    printf("This can render your deleted files unrecoverable. Are you sure you wish to continue? (y for yes)\n");
+    
+    getchar(); //workaround for the \n remaining in the buffer after scanf. 
+    r = getchar(); 
      if(r == 'y'){
        random_data_file();
     }

@@ -36,14 +36,14 @@ void main(int argc, char **argv){
     
     fseek(fp, 0L, SEEK_END);
     double size = ftell(fp);
-    int byte_count = 1 + round(size/200);
+    int byte_count = 1 + round(size/200); //Not error-safe. A mechanic's , but not an engineer's way. TODO: something about that
     
     char data[byte_count];
     int kl_file;
     int count = 0;
     
     for(int i=0; i<overwrites; i++){
-        kl_file = syscall(SYS_open, argv[1], O_RDWR | O_LARGEFILE); //TODO: add check for errors
+        kl_file = syscall(SYS_open, argv[1], O_RDWR | O_LARGEFILE); //TODO: add error check
         while(count<size){
             fread(&data, 1, byte_count, random);
             //fwrite(data , 1 ,byte_count , fp ); //an einai  sizeof(data)/sizeof(char) anti gia 1, kaneis space/4
@@ -51,7 +51,7 @@ void main(int argc, char **argv){
                 count+=byte_count;
             }
         }
-         syscall(SYS_close, argv[1]); //close the file, otherwise the new data is appended to the end of it.
+         syscall(SYS_close, argv[1]); //close the file, otherwise the new data is appended to its' end.
         count=0;
     }
     

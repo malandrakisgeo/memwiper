@@ -10,6 +10,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#define CHUNKSIZE 10*2048*sizeof(char)
+
 int sysinfo(struct sysinfo *info);
 long ramchunks;
     
@@ -39,7 +41,7 @@ void memwiper(){
     FILE *fp;
     fp = fopen("/dev/urandom", "rb");
     
-    char* data = (char *) calloc( 1, 10*2048*sizeof(char));//sets all bits to zero!
+    char* data = (char *) calloc( 1, CHUNKSIZE);//sets all bits to zero! . Can be up to 64kbs
     
     /*
      * The program is expected to crush as soon as calloc returns NULL due to lack of available space.
@@ -50,7 +52,8 @@ void memwiper(){
     */
     
     //TODO: Change RLIMIT_AS limit. 
-    while(NULL != calloc(5, 2048*sizeof(char))){
+    //while(NULL != calloc(5, 2048*sizeof(char))){
+    while((data = calloc(1, CHUNKSIZE)) != NULL){
           fread(&data[0], 1, 2048, fp); //Overwrites RAM with random data. 2kbs everytime. 
     }
     return;
