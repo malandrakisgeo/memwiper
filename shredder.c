@@ -4,38 +4,35 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <sys/syscall.h>
- #include <sys/types.h>
-
-
-
+#include <sys/types.h>
 #include <linux/version.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/random.h>
 #include <errno.h>
-
+#include <string.h>
+#include  <signal.h>
+#include <math.h>
 
 
 #define O_RDWR           02 //linux
 #define O_APPEND        02000 //linux
-#define def_size    1024*1024*300
+#define def_size    1024*1024*300 
 extern void *sys_call_table[];
 int (*open_orig)(const char *filename, int flags);
 ssize_t (*write_orig)(int fd, const void *buf, size_t count);
 
 int statvfs(const char *path, struct statvfs *buf);
 
-long int space = 1024*1024*230;
-int byte_count = def_size; //to be modified afterwards 
+long int space = 1024*1024*900;
 char data[def_size];
-//char* data; //best strategy for large numbers
+long int byte_count = def_size; //to be modified afterwards 
 int percentage = 0;
+char path[128];
 
+FILE *randomDataFile;
+FILE *fp;
 
-pthread_mutex_t lock;
-pthread_t tid[1];
-
-bool initialized;
 
 long int GetAvailableSpace(const char* path)
 {
@@ -43,109 +40,115 @@ long int GetAvailableSpace(const char* path)
 
   if (statvfs(path, &stat) != 0) {
     // error happens, just quits here
-    return -1;
+    printf(" Cannot retrieve metadata for  %s \n", path);
+    exit(EXIT_FAILURE);
   }
 
   // the available size is f_bsize * f_bavail
   return stat.f_bsize * stat.f_bfree;
 } //AKOMA KALYTERA, PAIKSE ME DF
 
-void showPlusFivePercent(){
-    percentage+=5; 
-    printf("%ld percent done\n",  percentage);
-    return;
+
+void doOnClosing(){
+    if(randomDataFile != NULL ){
+        fclose(randomDataFile);
+        remove(path);
+    }
+    exit(EXIT_FAILURE);
 }
 
-void* random_data_file(){ //lush gia mastorous
 
-        FILE *fp;
+void* random_data_file(){ //lush gia mastorous, alla sunousiazei.
+
     fp = fopen("/dev/urandom", "rb");
     long int count = 0;
 
-    FILE *rand;
-    rand=fopen("TMPFILE924", "wb+");
-    //rand = tmpfile();
+    strcat(path, ".randomdata-memwiper"); 
+
+    //The procedure becomes woefully slow with tmpfile. Utreda varför. 
+    //if(strncmp(path, "/", 1)==0){ //returns 0 if they are the same
+    //    randomDataFile = tmpfile();}
+    //else{
+        randomDataFile=fopen(path, "wb+");
+    //}
     
-    double percentage = 0;
-    int n = 1;
+    double p = (double)space / (100.0 * (double) byte_count);
+    int n = 0;
+    int percentage = 0;
+    int pace = 1;
+    if((int)p<1){
+        pace = round(1.0/p);
+        p=1;
+    }
+    
+    printf("The prodecure may take some time. Please be patient! \n");
+    printf("0 percent  done\n");
     while(count<space){
 
         fread(&data, 1, byte_count, fp);
-        if(fwrite(data , byte_count ,1 , rand ) !=-1 ){ //an einai  sizeof(data)/sizeof(char) anti gia 1, kaneis space/4
+        if(fwrite(data , byte_count ,1 , randomDataFile ) !=-1 ){ //an einai  sizeof(data)/sizeof(char) anti gia 1, kaneis space/4
             count+=byte_count;
+            //printf("%ld count, %ld  space \n", count, space);
+            ++n;
+            if(n==(int)p){
+               printf("%ld percent  done\n", percentage+=pace);
+               n=0;
+            }
         }
-        percentage = (double)count/ (double)space;
-        //if((percentage > (double)(0.08*n)) && (percentage < (double)(0.12*n))){
-           printf("%lf percent  done\n", percentage*100 );
-           // n+=1;
-       // }
+
+           /*
+            * VERBOSE ALGO:
+            * 1. Xwrizoume to space se ekato kommatia.
+            *  2. Vriskoume posa byte_count xwrane sto kathena, estw p.
+            * 3. Opote n=p sth loopa, printf kai n=0.
+            */
          
-        
-        if(percentage*100> (double)80){
-            /* 
-             * space = GetAvailableSpace("/"); //recheck
-             * 
-             */
-            byte_count= 1024*1024*5;
-        }
-        
     }
-    
-    fclose(rand);
+    doOnClosing();
+}
+
+
+void fixSizes(){
+    /*
+     * An r=space/100 <300mbs, 
+     * tote byte_count = r/2
+     */
+    if(space<byte_count){
+        byte_count=space/2;
+    }
 }
 
 
 void main(char *argv[]){
-    char path[128];
+    atexit (doOnClosing);
+    signal(SIGINT, doOnClosing);
     char r;
 
-    printf("Press enter for default mount point ('/'). Otherwise, insert the mount point of the device (you may use the 'df' command to check it). Please be certain before doing do.  \n" );
-    scanf( "%s" , &path );
+    printf("Insert the mount point of the target device (you may use the 'df' command to check it). Please double-check and be certain before doing so.  \n" );
+    scanf( "%s" , &path ); //scanf ignores empty characters!
+    /*fgets(&path, 128, stdin);
+
     
-    if(path == "\n"){
+    if(path == "\n" || path ==0x0A){ //KEINE AHNUNG WAS LOS IST!
         path[0] = "/";
-    }
+    }*/
     space = GetAvailableSpace(&path); //mounted point!
     
     printf(" Available space in bytes on %s : %ld \n", path,  space);
-    printf("This can render your deleted files unrecoverable. Are you sure you wish to continue? (y for yes)\n");
+    printf("This can render your deleted files unrecoverable and may not be undone. Are you sure you wish to continue? (y for yes)\n");
     
-    getchar(); //workaround for the \n remaining in the buffer after scanf. 
+    getchar(); //workaround for the \n remaining in the buffer after scanf. Otan to ksanavalw.. 
     r = getchar(); 
      if(r == 'y'){
-       random_data_file();
+        printf("Please avoid writing data on the disk during the procedure. \n");
+        fixSizes();
+        random_data_file();
+    }else{
+        printf(" Aborted. \n");
     }
 
 
 }
-
-
-
-
-
-
-
-
-
-
-int random_data_file_simple() //lush gia mastorous
-{
-    int byte_count = 1024;
-    char data[4096];
-    FILE *fp;
-    fp = fopen("/dev/urandom", "rb");
-    fread(&data, 1, byte_count, fp);
-    int n;
-
-    FILE *rand;
-    rand=fopen("randomdata.txt", "w");
-    fprintf(rand, data);
-    fclose(rand);
-}
-
-
-
-
 
 
 
