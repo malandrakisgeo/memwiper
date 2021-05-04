@@ -20,7 +20,7 @@
 #define O_APPEND        02000 //linux
 #define O_LARGEFILE 0 //linux
 
-
+ 
 
 void main(int argc, char **argv){
     printf("This will overwrite your file. If you are using an SSD with wear leveling, there is no guarantee that the data will be really erased and it is suggested that you use the shredder utility afterwards.  \n");

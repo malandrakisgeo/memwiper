@@ -13,7 +13,7 @@
 #include <string.h>
 #include  <signal.h>
 #include <math.h>
-
+ 
 
 #define O_RDWR           02 //linux
 #define O_APPEND        02000 //linux
