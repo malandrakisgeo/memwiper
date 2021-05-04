@@ -1,6 +1,0 @@
-1. Get available space on a given disk 
-2. Create a new file
-3. As long as the size of the file does not exceed the size of the available space, 
-write random data. 
-(4. Check every once in a while if the available space changed) 
-Then flush the file onto the disk!
