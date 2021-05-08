@@ -1,14 +1,14 @@
 #include <stdio.h> 
 #include <sys/statvfs.h>
 #include <stdlib.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <pthread.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
-#include <linux/version.h>
-#include <linux/kernel.h>
-#include <linux/module.h>
-#include <linux/random.h>
+//#include <linux/version.h>
+//#include <linux/kernel.h>
+//#include <linux/module.h>
+//#include <linux/random.h>
 #include <errno.h>
 #include <string.h>
 #include  <signal.h>
@@ -49,11 +49,20 @@ long int GetAvailableSpace(const char* path)
 } //AKOMA KALYTERA, PAIKSE ME DF
 
 
-void doOnClosing(){
+void beforeClosing(){
     if(randomDataFile != NULL ){
         fclose(randomDataFile);
         remove(path);
     }
+}
+
+void closeSuccess(){
+    beforeClosing();
+    exit(EXIT_SUCCESS);
+}
+
+void closeFailure(){
+    beforeClosing();
     exit(EXIT_FAILURE);
 }
 
@@ -104,7 +113,7 @@ void* random_data_file(){ //lush gia mastorous, alla sunousiazei.
             */
          
     }
-    doOnClosing();
+    closeSuccess();
 }
 
 
@@ -120,8 +129,8 @@ void fixSizes(){
 
 
 void main(char *argv[]){
-    atexit (doOnClosing);
-    signal(SIGINT, doOnClosing);
+    atexit(closeSuccess);
+    signal(SIGINT, closeFailure);
     char r;
 
     printf("Insert the mount point of the target device (you may use the 'df' command to check it). Please double-check and be certain before doing so.  \n" );
