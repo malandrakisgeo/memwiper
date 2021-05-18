@@ -9,11 +9,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdbool.h>
 
-#define CHUNKSIZE 10*2048*sizeof(char)
+#define CHUNKSIZE 100*2048*sizeof(char)
 
 int sysinfo(struct sysinfo *info);
 long ramchunks;
+bool randomData = 0;
     
 //struct sysinfo {
                //long uptime;             /* Seconds since boot */
@@ -48,28 +50,36 @@ void memwiper(){
      * Though highly unlikely (check the manuals of calloc about that), it is probable that that calloc will return NULL
      * despite the existence of available space in ram. Hence the while(1) in the calling loop:
      * this program will run until RAM is exhausted, thereby crushing the system. 
+     * 
+     * You may use watch -d free -m to see it in action!
      
     */
     
     //TODO: Change RLIMIT_AS limit. 
     //while(NULL != calloc(5, 2048*sizeof(char))){
     while((data = calloc(1, CHUNKSIZE)) != NULL){
-          fread(&data[0], 1, 2048, fp); //Overwrites RAM with random data. 2kbs everytime. 
+        if(randomData!=0){
+            fread(&data[0], 1, CHUNKSIZE, fp); //Overwrites RAM with random data. 200kb everytime. 
+
+        }
     }
     return;
 }
 
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
     struct sysinfo info;
 
-    long localRamValue;
+    /*long localRamValue;
     
     if(sysinfo(&info) > -1){
         localRamValue = info.freeram;
     } else{
         return 0;
+    }*/
+    if(getopt(argc,argv,"r") != -1){
+        randomData = 1;
     }
     
     struct rlimit old_lim, lim, new_lim;
