@@ -1,7 +1,8 @@
  
-all: 	gcc -o fileoverwriter.o /fileoverwrite.c -lm
-	gcc -o ramwiper.o /ramwiper.c
-	gcc -o shredder.o /shredder.c -lm
+all: 	
+	gcc -o fileoverwriter.o fileoverwriter.c -lm -I.
+	gcc -o ramwiper.o ramwiper.c
+	gcc -o shredder.o shredder.c -lm -I.
 
 install: all
 

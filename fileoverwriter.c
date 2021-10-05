@@ -1,19 +1,4 @@
-#include <stdio.h> 
-#include <sys/statvfs.h>
-#include <stdlib.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-#include <math.h>
-#include <linux/version.h>
-#include <linux/random.h>
-#include <math.h>
-
-
-#define O_RDWR           02 //linux
-#define O_APPEND        02000 //linux
-#define O_LARGEFILE 0 //linux
-
- 
+#include <memwiper.h>
 
 void main(int argc, char **argv){
     printf("This will overwrite your file. If you are using an SSD with wear leveling, there is no guarantee that the data will be really erased and it is suggested that you use the shredder utility afterwards.  \n");

@@ -1,4 +1,4 @@
-#include <stdio.h> 
+/* #include <stdio.h> 
 #include <sys/statvfs.h>
 #include <stdlib.h>
 //#include <stdbool.h>
@@ -10,14 +10,16 @@
 //#include <linux/module.h>
 //#include <linux/random.h>
 #include <errno.h>
-#include <string.h>
-#include  <signal.h>
 #include <math.h>
  
 
 #define O_RDWR           02 //linux
 #define O_APPEND        02000 //linux
-#define def_size    1024*1024*300 
+#define def_size    1024*1024*300 */
+#include <memwiper.h>
+#include  <signal.h>
+#include <string.h>
+
 extern void *sys_call_table[];
 int (*open_orig)(const char *filename, int flags);
 ssize_t (*write_orig)(int fd, const void *buf, size_t count);

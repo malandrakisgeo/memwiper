@@ -1,26 +1,31 @@
-#define _GNU_SOURCE
+/* #define _GNU_SOURCE
 #include <stdio.h>
-#include <sys/sysinfo.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include <sys/resource.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
-#include <stdbool.h>
-#include <signal.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 #define CHUNKSIZE 100*2048*sizeof(char)
 
 int sysinfo(struct sysinfo *info);
 long ramchunks;
+    */ 
+
+#include <memwiper.h>
+#include <stdbool.h>
+#include <sys/sysinfo.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/resource.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <time.h>
+
+#include <fcntl.h>
 bool randomData = 0;
-    
+
 //struct sysinfo {
                //long uptime;             /* Seconds since boot */
                //unsigned long loads[3];  /* 1, 5, and 15 minute load averages */
@@ -45,7 +50,7 @@ void memwiper(){
     //char *cmd = "/proc/meminfo";
     //FILE *cmdfile = popen(cmd, "r");
     FILE *fp;
-    fp = fopen("/dev/urandom", "rb");
+    fp = fopen(RANDOM_DATA_GENERATOR, "rb");
     
     char* data = (char *) calloc( 1, CHUNKSIZE);//sets all bits to zero! . Can be up to 64kbs
     
@@ -61,40 +66,27 @@ void memwiper(){
     
     //TODO: Change RLIMIT_AS limit. 
     //while(NULL != calloc(5, 2048*sizeof(char))){
-        
-
     while((data = calloc(1, CHUNKSIZE)) != NULL){
         if(randomData!=0){
             fread(&data[0], 1, CHUNKSIZE, fp); //Overwrites RAM with random data. 200kb everytime. 
+
         }
     }
     return;
 }
 
-void doWhenClosing(){    struct sysinfo info;
-
-     printf("Memory now: %lu \n", info.freeram);
-
-}
 
 
 int main(int argc, char *argv[]) {
     struct sysinfo info;
-    atexit(doWhenClosing);
- printf("Memory now: %ld \n", info.freeram);
 
-    /* 
-        //Do on signal: 
-
-    struct sigaction action;
-    memset(&action, 0, sizeof(action));
-    action.sa_handler = doWhenClosing;
-    sigaction(SIGTERM, &action, NULL); 
-
-    */ 
-    signal(SIGTERM, SIG_IGN); //Ignore signal
-
-
+    /*long localRamValue;
+    
+    if(sysinfo(&info) > -1){
+        localRamValue = info.freeram;
+    } else{
+        return 0;
+    }*/
     if(getopt(argc,argv,"r") != -1){
         randomData = 1;
     }
