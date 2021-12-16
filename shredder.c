@@ -1,21 +1,3 @@
-/* #include <stdio.h> 
-#include <sys/statvfs.h>
-#include <stdlib.h>
-//#include <stdbool.h>
-#include <pthread.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-//#include <linux/version.h>
-//#include <linux/kernel.h>
-//#include <linux/module.h>
-//#include <linux/random.h>
-#include <errno.h>
-#include <math.h>
- 
-
-#define O_RDWR           02 //linux
-#define O_APPEND        02000 //linux
-#define def_size    1024*1024*300 */
 #include <memwiper.h>
 #include  <signal.h>
 #include <string.h>

@@ -1,17 +1,3 @@
-/* #define _GNU_SOURCE
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <time.h>
-
-#include <fcntl.h>
-
-#define CHUNKSIZE 100*2048*sizeof(char)
-
-int sysinfo(struct sysinfo *info);
-long ramchunks;
-    */ 
-
 #include <memwiper.h>
 #include <stdbool.h>
 #include <sys/sysinfo.h>
@@ -80,13 +66,6 @@ void memwiper(){
 int main(int argc, char *argv[]) {
     struct sysinfo info;
 
-    /*long localRamValue;
-    
-    if(sysinfo(&info) > -1){
-        localRamValue = info.freeram;
-    } else{
-        return 0;
-    }*/
     if(getopt(argc,argv,"r") != -1){
         randomData = 1;
     }
